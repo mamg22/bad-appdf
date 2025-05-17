@@ -34,17 +34,14 @@ def main():
 
     for (contours, hierarchy), dimensions in iter_frames():
         p = doc.new_page(width=dimensions[0], height=dimensions[1])
-        if not contours:
-            continue
 
         for n, contour in enumerate(contours):
-            if hierarchy[0][n][-1] >= 0:
-                color = (1, 1, 1)
-            else:
+            if hierarchy[0,n,-1] == -1:
                 color = (0, 0, 0)
-            contour = np.vstack(contour).squeeze().tolist()
-            if not isinstance(contour[0], list):
-                contour = [contour]
+            else:
+                color = (1, 1, 1)
+
+            contour = contour.squeeze(axis=1).tolist()
             p.draw_polyline(contour, fill=color)
 
     doc.ez_save("bad.pdf")
